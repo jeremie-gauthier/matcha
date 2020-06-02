@@ -3,6 +3,7 @@ CREATE DATABASE matchadb;
 USE matchadb;
 
 -- TABLES
+
 -- GENDERS + POPULATE
 CREATE TABLE genders (
   id INT UNSIGNED AUTO_INCREMENT,
@@ -47,14 +48,22 @@ CREATE TABLE users (
   last_log TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
   reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id),
-  FOREIGN KEY (id_genders) REFERENCES `genders`(`id`)
+  FOREIGN KEY (id_genders) REFERENCES genders(id)
 ) ENGINE="InnoDB";
+
+-- INSERT INTO
+--   users (id_genders, email, uname, password, firstname, lastname)
+-- VALUES
+-- (1, 'jeremiegthr@gmail.com', 'jergauth', 'abc123', 'jeremie', 'gauthier'),
+-- (2, 'cmoulini@student.42.fr', 'cmoulini', '123abc', 'caroline', 'moulinier'),
+-- (1, 'jeremiegthr@gmail.com', 'jergauth', 'abc123', 'jeremie', 'gauthier');
 
 -- ORIENTATION [USERS, GENDERS]
 CREATE TABLE user_orientation (
   id_users INT UNSIGNED NOT NULL,
   id_genders INT UNSIGNED NOT NULL,
-  PRIMARY KEY (id_users, id_genders)
+  FOREIGN KEY (id_users) REFERENCES users(id),
+  FOREIGN KEY (id_genders) REFERENCES genders(id)
 ) ENGINE="InnoDB";
 
 -- INTERESTS + POPULATE
@@ -106,43 +115,61 @@ ON
 CREATE TABLE user_interest (
   id_users INT UNSIGNED NOT NULL,
   id_interests INT UNSIGNED NOT NULL,
-  PRIMARY KEY (id_users, id_interests)
+  FOREIGN KEY (id_users) REFERENCES users(id),
+  FOREIGN KEY (id_interests) REFERENCES interests(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE pictures (
   id INT UNSIGNED AUTO_INCREMENT,
   id_users INT UNSIGNED NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (id_users) REFERENCES `users`(`id`)
+  FOREIGN KEY (id_users) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE likes (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  PRIMARY KEY (origin, target)
+  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (target) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE matches (
   id_users1 INT UNSIGNED NOT NULL,
   id_users2 INT UNSIGNED NOT NULL,
-  PRIMARY KEY (id_users1, id_users2)
+  FOREIGN KEY (id_users1) REFERENCES users(id),
+  FOREIGN KEY (id_users2) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE notifications (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
   type SET("like", "visit", "message", "match", "unmatch"),
-  PRIMARY KEY (origin, target)
+  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (target) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE blacklist (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  PRIMARY KEY (origin, target)
+  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (target) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
 CREATE TABLE reports (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  PRIMARY KEY (origin, target)
+  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (target) REFERENCES users(id)
 ) ENGINE="InnoDB";
+
+-- TRIGGERS
+
+-- CREATE TRIGGER before_delete_users
+-- BEFORE DELETE ON users
+-- FOR EACH ROW
+-- BEGIN
+--   DELETE FROM user_orientation WHERE id_users = OLD.id;
+--   DELETE FROM user_interest WHERE id_users = OLD.id;
+--   DELETE FROM user_orientation WHERE id_users = OLD.id;
+--   DELETE FROM user_orientation WHERE id_users = OLD.id;
+-- END ;
