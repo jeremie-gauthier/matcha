@@ -55,8 +55,10 @@ CREATE TABLE users (
 CREATE TABLE user_orientation (
   id_users INT UNSIGNED NOT NULL,
   id_genders INT UNSIGNED NOT NULL,
-  FOREIGN KEY (id_users) REFERENCES users(id),
+  FOREIGN KEY (id_users) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (id_genders) REFERENCES genders(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 -- INTERESTS + POPULATE
@@ -108,8 +110,10 @@ ON
 CREATE TABLE user_interest (
   id_users INT UNSIGNED NOT NULL,
   id_interests INT UNSIGNED NOT NULL,
-  FOREIGN KEY (id_users) REFERENCES users(id),
+  FOREIGN KEY (id_users) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (id_interests) REFERENCES interests(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 CREATE TABLE pictures (
@@ -122,37 +126,47 @@ CREATE TABLE pictures (
 CREATE TABLE likes (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (origin) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (target) REFERENCES users(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 CREATE TABLE matches (
   id_users1 INT UNSIGNED NOT NULL,
   id_users2 INT UNSIGNED NOT NULL,
-  FOREIGN KEY (id_users1) REFERENCES users(id),
+  FOREIGN KEY (id_users1) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (id_users2) REFERENCES users(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 CREATE TABLE notifications (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
   type SET("like", "visit", "message", "match", "unmatch"),
-  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (origin) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (target) REFERENCES users(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 CREATE TABLE blacklist (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (origin) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (target) REFERENCES users(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 CREATE TABLE reports (
   origin INT UNSIGNED NOT NULL,
   target INT UNSIGNED NOT NULL,
-  FOREIGN KEY (origin) REFERENCES users(id),
+  FOREIGN KEY (origin) REFERENCES users(id)
+    ON DELETE CASCADE,
   FOREIGN KEY (target) REFERENCES users(id)
+    ON DELETE CASCADE
 ) ENGINE="InnoDB";
 
 -- STORED PROCEDURES
