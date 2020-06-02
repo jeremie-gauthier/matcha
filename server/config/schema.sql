@@ -193,12 +193,27 @@ $$
 
 -- TRIGGERS
 
--- CREATE TRIGGER before_delete_users
--- BEFORE DELETE ON users
--- FOR EACH ROW
--- BEGIN
---   DELETE FROM user_orientation WHERE id_users = OLD.id;
---   DELETE FROM user_interest WHERE id_users = OLD.id;
---   DELETE FROM user_orientation WHERE id_users = OLD.id;
---   DELETE FROM user_orientation WHERE id_users = OLD.id;
--- END ;
+CREATE TRIGGER before_insert_users
+BEFORE INSERT ON users
+FOR EACH ROW
+BEGIN
+  IF EXISTS (SELECT email FROM users WHERE email = NEW.email)
+  THEN
+    BEGIN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = "Cette adresse email est deja reliee a un compte.";
+    END;
+  END IF;
+
+  IF EXISTS (SELECT uname FROM users WHERE uname = NEW.uname)
+  THEN
+    BEGIN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = "Ce nom d'utilisateur est deja pris.";
+    END;
+  END IF;
+END;
+
+$$
+
+DELIMITER ;
