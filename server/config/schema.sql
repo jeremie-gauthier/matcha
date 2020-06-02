@@ -162,6 +162,35 @@ CREATE TABLE reports (
   FOREIGN KEY (target) REFERENCES users(id)
 ) ENGINE="InnoDB";
 
+-- STORED PROCEDURES
+
+DELIMITER $$
+
+-- Procedure that should be called after each insertion in likes table
+-- `id_users1` is `target` from the likes insertion
+-- `id_users2` is `origin` from the likes insertion
+CREATE PROCEDURE insert_match_if_exists(id_users1 INT UNSIGNED, id_users2 INT UNSIGNED)
+BEGIN
+  IF EXISTS (SELECT * FROM likes WHERE origin = id_users1 AND target = id_users2)
+  THEN
+    BEGIN
+      -- Create new match
+      INSERT INTO matches (id_users1, id_users2)
+      VALUES (id_users1, id_users2);
+      -- Create match notification
+      INSERT INTO notifications (origin, target, type)
+      VALUES
+        (id_users1, id_users2, "match"),
+        (id_users2, id_users1, "match");
+      -- Delete likes
+      DELETE FROM likes WHERE target = id_users1 AND origin = id_users2;
+      DELETE FROM likes WHERE target = id_users2 AND origin = id_users1;
+    END;
+  END IF;
+END;
+
+$$
+
 -- TRIGGERS
 
 -- CREATE TRIGGER before_delete_users
