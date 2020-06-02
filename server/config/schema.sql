@@ -51,13 +51,6 @@ CREATE TABLE users (
   FOREIGN KEY (id_genders) REFERENCES genders(id)
 ) ENGINE="InnoDB";
 
--- INSERT INTO
---   users (id_genders, email, uname, password, firstname, lastname)
--- VALUES
--- (1, 'jeremiegthr@gmail.com', 'jergauth', 'abc123', 'jeremie', 'gauthier'),
--- (2, 'cmoulini@student.42.fr', 'cmoulini', '123abc', 'caroline', 'moulinier'),
--- (1, 'jeremiegthr@gmail.com', 'jergauth', 'abc123', 'jeremie', 'gauthier');
-
 -- ORIENTATION [USERS, GENDERS]
 CREATE TABLE user_orientation (
   id_users INT UNSIGNED NOT NULL,
