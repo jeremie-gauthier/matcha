@@ -217,3 +217,13 @@ END;
 $$
 
 DELIMITER ;
+
+
+INSERT INTO
+  users (id_genders, email, uname, password, firstname, lastname)
+VALUES
+(1, 'jeremiegthr@gmail.com', 'jergauth', 'abc123', 'jeremie', 'gauthier'),
+(2, 'cmoulini@student.42.fr', 'cmoulini', '123abc', 'caroline', 'moulinier'),
+(3, 'example@email.com', 't-rex', '123abc', 'Monsieur', 'REX');
+
+INSERT INTO likes (target, origin) VALUES (1, 2), (2, 1), (1, 3), (2, 3);
