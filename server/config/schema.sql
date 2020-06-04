@@ -241,6 +241,24 @@ END;
 
 $$
 
+CREATE TRIGGER before_insert_blacklist
+BEFORE INSERT ON blacklist
+FOR EACH ROW
+BEGIN
+  CALL block_user(NEW.origin, NEW.target);
+END
+
+$$
+
+CREATE TRIGGER before_insert_reports
+BEFORE INSERT ON reports
+FOR EACH ROW
+BEGIN
+  CALL block_user(NEW.origin, NEW.target);
+END
+
+$$
+
 DELIMITER ;
 
 
