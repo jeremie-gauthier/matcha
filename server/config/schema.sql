@@ -226,6 +226,7 @@ $$
 DELIMITER ;
 
 
+-- DATA SAMPLE
 INSERT INTO
   users (id_genders, email, uname, password, firstname, lastname)
 VALUES
@@ -234,3 +235,4 @@ VALUES
 (3, 'example@email.com', 't-rex', '123abc', 'Monsieur', 'REX');
 
 INSERT INTO likes (target, origin) VALUES (1, 2), (2, 1), (1, 3), (2, 3);
+CALL insert_match_if_exists(1, 2);
