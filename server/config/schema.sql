@@ -198,6 +198,24 @@ END;
 
 $$
 
+CREATE PROCEDURE block_user(origin INT UNSIGNED, target INT UNSIGNED)
+BEGIN
+  -- Delete match if exists
+  DELETE FROM matches WHERE
+    (id_users1 = origin AND id_users2 = target)
+    OR (id_users1 = target AND id_users2 = origin);
+  -- Delete notifications
+  DELETE FROM notifications WHERE
+    (notifications.origin = origin AND notifications.target = target)
+    OR (notifications.origin = target AND notifications.target = origin);
+  -- Delete likes
+  DELETE FROM likes WHERE
+    (likes.origin = origin AND likes.target = target)
+    OR (likes.origin = target AND likes.target = origin);
+END;
+
+$$
+
 -- TRIGGERS
 
 CREATE TRIGGER before_insert_users
